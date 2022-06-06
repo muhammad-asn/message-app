@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: app_server
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name: app-configmap
+          - secretRef:
+              name: app-secret
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: app_backend
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name: app-configmap
+          - secretRef:
+              name: app-secret
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: database
+        image: app_database
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name: app-configmap
+          - secretRef:
+              name: app-secret
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cache
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cache
+  template:
+    metadata:
+      labels:
+        app: cache
+    spec:
+      containers:
+      - name: cache
+        image: app_cache
+        imagePullPolicy: Never
+        envFrom:
+          - configMapRef:
+              name: app-configmap
+          - secretRef:
+              name: app-secret
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

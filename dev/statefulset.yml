@@ -1,0 +1,159 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq # must match .spec.template.metadata.labels
+  serviceName: rabbitmq
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rabbitmq # must match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3-management-alpine 
+        imagePullPolicy: Never
+        ports:
+        - name: amqp
+          containerPort: 5672
+        - name: dashboard
+          containerPort: 15672
+        volumeMounts:
+        - name: rabbitmq-volume
+          mountPath: /var/lib/rabbitmq
+        readinessProbe:
+          exec:
+             command: ["rabbitmq-diagnostics", "ping"]
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 5
+        livenessProbe:
+          exec:
+            command: ["rabbitmq-diagnostics", "-q", "status"]
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 5
+  volumeClaimTemplates:
+  - metadata:
+      name: rabbitmq-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: postgres # must match .spec.template.metadata.labels
+  serviceName: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres # must match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:13-alpine
+        ports:
+        - name: db
+          containerPort: 5432
+        volumeMounts:
+        - name: postgres-volume
+          mountPath: /var/lib/postgresql
+        - name: postgres-init-db
+          mountPath: /docker-entrypoint-initdb.d
+        envFrom:
+          - configMapRef:
+              name: postgres-init-db-config
+          - configMapRef:
+              name: app-configmap
+          - secretRef:
+              name: app-secret
+        readinessProbe:
+          exec:
+             command: ["pg_isready", "-U", "postgres"]
+          initialDelaySeconds: 20
+          periodSeconds: 60
+          timeoutSeconds: 20
+          failureThreshold: 5
+        livenessProbe:
+          exec:
+            command: ["pg_isready", "-U", "postgres"]
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 5
+      volumes:
+        - name: postgres-init-db
+          configMap:
+            name: postgres-init-db-config
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: redis # must match .spec.template.metadata.labels
+  serviceName: redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis # must match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: redis
+        image: redis:6-alpine
+        ports:
+        - name: redis
+          containerPort: 6379
+        volumeMounts:
+        - name: redis-volume
+          mountPath: /data
+        readinessProbe:
+          exec:
+             command: ["redis-cli", "ping"]
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 5
+        livenessProbe:
+          exec:
+            command: ["redis-cli", "ping"]
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 5
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

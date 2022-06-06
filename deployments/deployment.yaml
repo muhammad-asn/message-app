@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
       - name: server
-        image: app_server
-        imagePullPolicy: Never
+        image: ${IMAGE_REPOSITORY}/app_server:${SERVER_SERVICE_VERSION}
+        imagePullPolicy: Always
         envFrom:
           - configMapRef:
               name: app-configmap
@@ -46,8 +46,8 @@ spec:
     spec:
       containers:
       - name: backend
-        image: app_backend
-        imagePullPolicy: Never
+        image: ${IMAGE_REPOSITORY}/app_backend:${BACKEND_SERVICE_VERSION}
+        imagePullPolicy: Always
         envFrom:
           - configMapRef:
               name: app-configmap
@@ -75,8 +75,8 @@ spec:
     spec:
       containers:
       - name: database
-        image: app_database
-        imagePullPolicy: Never
+        image: ${IMAGE_REPOSITORY}/app_database:${DATABASE_SERVICE_VERSION}
+        imagePullPolicy: Always
         envFrom:
           - configMapRef:
               name: app-configmap
@@ -104,8 +104,8 @@ spec:
     spec:
       containers:
       - name: cache
-        image: app_cache
-        imagePullPolicy: Never
+        image: ${IMAGE_REPOSITORY}/app_server:${CACHE_SERVICE_VERSION}
+        imagePullPolicy: Always
         envFrom:
           - configMapRef:
               name: app-configmap

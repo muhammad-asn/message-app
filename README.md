@@ -11,4 +11,10 @@ k8s manifests:
 - Statefulset
   - [x] RabbitMQ
   - [x] PostgreSQL
-  - [X] Redis  
+  - [X] Redis
+
+
+Scenario
+- [x] Standard (Pull Based)
+- [ ] Image Watcher
+- [ ] Notification

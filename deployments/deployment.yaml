@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: server
-  namespace: dev
+  namespace: ${NS_NAME}
 spec:
   replicas: 1
   selector:
@@ -33,7 +33,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  namespace: dev
+  namespace: ${NS_NAME}
 spec:
   replicas: 1
   selector:
@@ -62,7 +62,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: database
-  namespace: dev
+  namespace: ${NS_NAME}
 spec:
   replicas: 1
   selector:
@@ -91,7 +91,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cache
-  namespace: dev
+  namespace: ${NS_NAME}
 spec:
   replicas: 1
   selector:

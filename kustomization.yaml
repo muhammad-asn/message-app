@@ -5,5 +5,5 @@ resources:
   - deployments/configmap.yaml
   - deployments/secret.yaml
   - deployments/services.yaml
-  - deployments/deployment.yaml
   - deployments/statefulset.yaml
+  - deployments/deployment.yaml

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: rabbitmq
-  namespace: dev
+  namespace: ${NS_NAME}
 spec:
   selector:
     matchLabels:
@@ -53,7 +53,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
-  namespace: dev
+  namespace: ${NS_NAME}
 spec:
   selector:
     matchLabels:
@@ -114,7 +114,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: redis
-  namespace: dev
+  namespace: ${NS_NAME}
 spec:
   selector:
     matchLabels:

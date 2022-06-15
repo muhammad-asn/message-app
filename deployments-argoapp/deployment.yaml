@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: ${IMAGE_REPOSITORY}/app_server:${SERVER_SERVICE_VERSION}
+        image: docker.io/nuga99/app_server:1.0.0
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: ${IMAGE_REPOSITORY}/app_backend:${BACKEND_SERVICE_VERSION}
+        image: docker.io/nuga99/app_backend:1.0.0
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
@@ -75,7 +75,7 @@ spec:
     spec:
       containers:
       - name: database
-        image: ${IMAGE_REPOSITORY}/app_database:${DATABASE_SERVICE_VERSION}
+        image: docker.io/nuga99/app_database:1.0.1
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
@@ -104,7 +104,7 @@ spec:
     spec:
       containers:
       - name: cache
-        image: ${IMAGE_REPOSITORY}/app_server:${CACHE_SERVICE_VERSION}
+        image: docker.io/nuga99/app_server:1.0.0
         imagePullPolicy: Always
         envFrom:
           - configMapRef:

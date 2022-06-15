@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: docker.io/nuga99/app_server:1.0.0
+        image: docker.io/nuga99/app_server:1.0.01
         imagePullPolicy: Always
         envFrom:
           - configMapRef:

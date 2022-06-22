@@ -104,7 +104,7 @@ spec:
     spec:
       containers:
       - name: cache
-        image: docker.io/nuga99/app_server:${CACHE_SERVICE_VERSION}
+        image: docker.io/nuga99/app_cache:${CACHE_SERVICE_VERSION}
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
